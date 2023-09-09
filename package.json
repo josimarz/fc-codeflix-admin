@@ -34,6 +34,10 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
+  "dependencies": {
+    "class-validator": "^0.14.0",
+    "lodash": "^4.17.21"
+  },
   "jest": {
     "moduleFileExtensions": [
       "js",
@@ -51,6 +55,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "./covarage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/@shared/infra/testing/ExpectHelpers.ts"
+    ]
   }
 }
