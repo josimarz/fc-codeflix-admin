@@ -1,0 +1,12 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
+  "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontWeight": "300",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true
+}
