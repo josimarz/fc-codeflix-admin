@@ -17,6 +17,10 @@ export class UUID extends ValueObject {
       throw new InvalidUUIDError();
     }
   }
+
+  toString(): string {
+    return this.id;
+  }
 }
 
 export class InvalidUUIDError extends Error {

@@ -157,7 +157,7 @@ describe('[Category] Unit Test', () => {
         createdAt,
       });
       expect(category.toJSON()).toStrictEqual({
-        id,
+        id: id.id,
         name,
         description,
         active: true,

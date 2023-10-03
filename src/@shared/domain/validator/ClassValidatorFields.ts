@@ -1,20 +1,18 @@
 import { validateSync } from 'class-validator';
-import { FieldsErrors, ValidatorFields } from './ValidatorFields';
+import { Notification } from './Notification';
+import { ValidatorFields } from './ValidatorFields';
 
-export abstract class ClassValidatorFields<T> implements ValidatorFields<T> {
-  errors: FieldsErrors;
-  validatedData: T;
-  validate(data: any): boolean {
-    const errors = validateSync(data);
+export abstract class ClassValidatorFields implements ValidatorFields {
+  validate(notification: Notification, data: any, fields: string[]): boolean {
+    const errors = validateSync(data, { groups: fields });
     if (errors.length) {
-      this.errors = {};
       for (const error of errors) {
         const field = error.property;
-        this.errors[field] = Object.values(error.constraints);
+        Object.values(error.constraints!).forEach((message) =>
+          notification.addError(message, field),
+        );
       }
-      return true;
     }
-    this.validatedData = data;
-    return false;
+    return !errors.length;
   }
 }

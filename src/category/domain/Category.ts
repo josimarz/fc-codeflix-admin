@@ -1,7 +1,6 @@
-import { ValueObject } from 'src/@shared/domain/ValueObject';
 import { Entity } from '../../@shared/domain/Entity';
-import { EntityValidationError } from '../../@shared/domain/validator/EntityValidationError';
 import { UUID } from '../../@shared/domain/value-object/uuid';
+import { CategoryFakeBuilder } from './CategoryFakeBuilder';
 import { CategoryValidatorFactory } from './CategoryValidator';
 
 export type CategoryProps = {
@@ -32,46 +31,44 @@ export class Category extends Entity {
     this.description = props.description ?? null;
     this.active = props.active ?? true;
     this.createdAt = props.createdAt || new Date();
-    Category.validate(this);
   }
 
-  get id(): ValueObject {
+  get id(): UUID {
     return this._id;
   }
 
   static create(command: CategoryCreateCommand): Category {
-    return new Category(command);
+    const category = new Category(command);
+    category.validate(['name']);
+    return category;
   }
 
   changeName(name: string): void {
     this.name = name;
-    Category.validate(this);
+    this.validate(['name']);
   }
 
   changeDescription(description: string): void {
     this.description = description;
-    Category.validate(this);
   }
 
   update(name: string, description: string): void {
     this.name = name;
     this.description = description;
-    Category.validate(this);
+    this.validate(['name']);
   }
 
   activate(): void {
     this.active = true;
-    Category.validate(this);
   }
 
   deactivate(): void {
     this.active = false;
-    Category.validate(this);
   }
 
   toJSON() {
     return {
-      id: this._id,
+      id: this._id.id,
       name: this.name,
       description: this.description,
       active: this.active,
@@ -79,10 +76,12 @@ export class Category extends Entity {
     };
   }
 
-  static validate(category: Category): void {
+  validate(fields?: string[]): boolean {
     const validator = CategoryValidatorFactory.create();
-    if (!validator.validate(category)) {
-      throw new EntityValidationError(validator.errors);
-    }
+    return validator.validate(this.notification, this, fields);
+  }
+
+  static fake(): typeof CategoryFakeBuilder {
+    return CategoryFakeBuilder;
   }
 }
